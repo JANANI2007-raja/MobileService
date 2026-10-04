@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Track Service - FixZone</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ===============================
+         NAVBAR
+    ================================ -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            FixZone
+        </div>
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="index.html">
+                    Home
+                </a>
+            </li>
+
+            <li>
+                <a href="service.html">
+                    Service
+                </a>
+            </li>
+
+            <li>
+                <a href="track.html">
+                    Track Service
+                </a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+    <!-- ===============================
+         TRACK PAGE
+    ================================ -->
+
+    <main class="track-page">
+
+        <div class="track-container">
+
+            <h1>
+                Track Your Service
+            </h1>
+
+            <p>
+                Enter your Service ID to check your service status.
+            </p>
+
+
+            <!-- TRACK INPUT -->
+
+            <div class="track-input-box">
+
+                <input
+                    type="text"
+                    id="serviceId"
+                    placeholder="Enter Service ID (Example: FZ12345)"
+                    autocomplete="off"
+                >
+
+                <button
+                    type="button"
+                    onclick="trackService()">
+                    Track Service
+                </button>
+
+            </div>
+
+
+            <!-- ERROR MESSAGE -->
+
+            <p
+                id="errorMessage"
+                class="track-error"
+                style="display: none;">
+            </p>
+
+
+            <!-- RESULT -->
+
+            <div
+                id="trackResult"
+                class="track-result"
+                style="display: none;">
+
+                <h2>
+                    Service Details
+                </h2>
+
+
+                <div class="track-detail-row">
+
+                    <span>
+                        Service ID
+                    </span>
+
+                    <strong id="resultServiceId">
+                    </strong>
+
+                </div>
+
+
+                <div class="track-detail-row">
+
+                    <span>
+                        Customer Name
+                    </span>
+
+                    <strong id="resultName">
+                    </strong>
+
+                </div>
+
+
+                <div class="track-detail-row">
+
+                    <span>
+                        Mobile Number
+                    </span>
+
+                    <strong id="resultPhone">
+                    </strong>
+
+                </div>
+
+
+                <div class="track-detail-row">
+
+                    <span>
+                        Mobile Brand
+                    </span>
+
+                    <strong id="resultBrand">
+                    </strong>
+
+                </div>
+
+
+                <div class="track-detail-row">
+
+                    <span>
+                        Mobile Model
+                    </span>
+
+                    <strong id="resultModel">
+                    </strong>
+
+                </div>
+
+
+                <div class="track-detail-row">
+
+                    <span>
+                        Service Type
+                    </span>
+
+                    <strong id="resultService">
+                    </strong>
+
+                </div>
+
+
+                <div class="track-detail-row">
+
+                    <span>
+                        Problem
+                    </span>
+
+                    <strong id="resultProblem">
+                    </strong>
+
+                </div>
+
+
+                <div class="track-detail-row">
+
+                    <span>
+                        Preferred Date
+                    </span>
+
+                    <strong id="resultDate">
+                    </strong>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="track-status">
+
+                    <span>
+                        Current Status
+                    </span>
+
+                    <strong id="resultStatus">
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- ===============================
+         JAVASCRIPT
+    ================================ -->
+
+    <script>
+
+        async function trackService() {
+
+            const serviceIdInput =
+                document.getElementById("serviceId");
+
+            const serviceId =
+                serviceIdInput.value.trim().toUpperCase();
+
+
+            const errorMessage =
+                document.getElementById("errorMessage");
+
+            const trackResult =
+                document.getElementById("trackResult");
+
+
+            // Hide old messages/results
+
+            errorMessage.style.display = "none";
+
+            trackResult.style.display = "none";
+
+
+            // Check empty input
+
+            if (serviceId === "") {
+
+                errorMessage.textContent =
+                    "Please enter your Service ID.";
+
+                errorMessage.style.display =
+                    "block";
+
+                return;
+            }
+
+
+            try {
+
+                // Send request to Spring Boot
+
+                const response =
+                    await fetch(
+                        "http://localhost:8080/api/services/"
+                        + encodeURIComponent(serviceId)
+                    );
+
+
+                // Service not found
+
+                if (response.status === 404) {
+
+                    errorMessage.textContent =
+                        "Service ID not found. Please check your ID.";
+
+                    errorMessage.style.display =
+                        "block";
+
+                    return;
+                }
+
+
+                // Other server error
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Server error"
+                    );
+                }
+
+
+                // Get service data
+
+                const service =
+                    await response.json();
+
+
+                // Display service details
+
+                document.getElementById(
+                    "resultServiceId"
+                ).textContent =
+                    service.serviceId || "N/A";
+
+
+                document.getElementById(
+                    "resultName"
+                ).textContent =
+                    service.customerName || "N/A";
+
+
+                document.getElementById(
+                    "resultPhone"
+                ).textContent =
+                    service.phone || "N/A";
+
+
+                document.getElementById(
+                    "resultBrand"
+                ).textContent =
+                    service.brand || "N/A";
+
+
+                document.getElementById(
+                    "resultModel"
+                ).textContent =
+                    service.model || "N/A";
+
+
+                document.getElementById(
+                    "resultService"
+                ).textContent =
+                    service.serviceType || "N/A";
+
+
+                document.getElementById(
+                    "resultProblem"
+                ).textContent =
+                    service.problem || "N/A";
+
+
+                document.getElementById(
+                    "resultDate"
+                ).textContent =
+                    service.preferredDate || "N/A";
+
+
+                document.getElementById(
+                    "resultStatus"
+                ).textContent =
+                    service.status || "RECEIVED";
+
+
+                // Show result
+
+                trackResult.style.display =
+                    "block";
+
+            }
+
+            catch (error) {
+
+                console.error(error);
+
+                errorMessage.textContent =
+                    "Unable to connect to the server. Please try again.";
+
+                errorMessage.style.display =
+                    "block";
+            }
+        }
+
+
+        // Allow Enter key
+
+        document.getElementById(
+            "serviceId"
+        ).addEventListener(
+            "keydown",
+            function (event) {
+
+                if (event.key === "Enter") {
+
+                    trackService();
+
+                }
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Panel - FixZone</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+
+        <div class="logo">
+            <span>Fix</span>Zone
+        </div>
+
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="service.html">Book Service</a>
+            <a href="track.html">Track Service</a>
+        </div>
+
+    </nav>
+
+
+    <!-- Admin Section -->
+    <section class="admin-section">
+
+        <div class="admin-container">
+
+            <div class="admin-header">
+
+                <h1>Admin Panel</h1>
+
+                <p>
+                    Manage customer service requests and update service status.
+                </p>
+
+            </div>
+
+
+            <!-- Refresh Button -->
+            <div class="admin-actions">
+
+                <button onclick="loadServices()" class="admin-refresh-btn">
+                    Refresh Requests
+                </button>
+
+            </div>
+
+
+            <!-- Loading Message -->
+            <p id="loadingMessage" class="admin-message">
+                Loading service requests...
+            </p>
+
+
+            <!-- Error Message -->
+            <p id="errorMessage" class="admin-error"></p>
+
+
+            <!-- Service Table -->
+            <div class="admin-table-container">
+
+                <table class="admin-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>Service ID</th>
+                            <th>Customer</th>
+                            <th>Phone</th>
+                            <th>Brand</th>
+                            <th>Model</th>
+                            <th>Service</th>
+                            <th>Problem</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="serviceTableBody">
+
+                        <!-- Data will be loaded here -->
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <script>
+
+        // Backend URL
+        const API_URL = "http://localhost:8080/api/services";
+
+
+        // Load all service requests
+        async function loadServices() {
+
+            const loadingMessage =
+                document.getElementById("loadingMessage");
+
+            const errorMessage =
+                document.getElementById("errorMessage");
+
+            const tableBody =
+                document.getElementById("serviceTableBody");
+
+
+            loadingMessage.style.display = "block";
+
+            loadingMessage.textContent =
+                "Loading service requests...";
+
+            errorMessage.textContent = "";
+
+            tableBody.innerHTML = "";
+
+
+            try {
+
+                const response = await fetch(API_URL);
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Unable to load service requests."
+                    );
+
+                }
+
+
+                const services = await response.json();
+
+
+                loadingMessage.style.display = "none";
+
+
+                // No services found
+                if (services.length === 0) {
+
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="9">
+                                No service requests found.
+                            </td>
+                        </tr>
+                    `;
+
+                    return;
+                }
+
+
+                // Display every service
+                services.forEach(service => {
+
+                    const row = document.createElement("tr");
+
+
+                    row.innerHTML = `
+
+                        <td>
+                            <strong>
+                                ${service.serviceId || "-"}
+                            </strong>
+                        </td>
+
+
+                        <td>
+                            ${service.customerName || "-"}
+                        </td>
+
+
+                        <td>
+                            ${service.phone || "-"}
+                        </td>
+
+
+                        <td>
+                            ${service.brand || "-"}
+                        </td>
+
+
+                        <td>
+                            ${service.model || "-"}
+                        </td>
+
+
+                        <td>
+                            ${service.serviceType || "-"}
+                        </td>
+
+
+                        <td>
+                            ${service.problem || "-"}
+                        </td>
+
+
+                        <td>
+                            ${service.preferredDate || "-"}
+                        </td>
+
+
+                        <td>
+
+                            <select
+                                class="status-select"
+                                onchange="updateStatus(
+                                    '${service.serviceId}',
+                                    this.value
+                                )"
+                            >
+
+                                <option value="RECEIVED"
+                                    ${service.status === "RECEIVED" ? "selected" : ""}>
+                                    RECEIVED
+                                </option>
+
+                                <option value="IN PROGRESS"
+                                    ${service.status === "IN PROGRESS" ? "selected" : ""}>
+                                    IN PROGRESS
+                                </option>
+
+                                <option value="READY FOR DELIVERY"
+                                    ${service.status === "READY FOR DELIVERY" ? "selected" : ""}>
+                                    READY FOR DELIVERY
+                                </option>
+
+                                <option value="COMPLETED"
+                                    ${service.status === "COMPLETED" ? "selected" : ""}>
+                                    COMPLETED
+                                </option>
+
+                            </select>
+
+                        </td>
+
+                    `;
+
+
+                    tableBody.appendChild(row);
+
+                });
+
+            }
+
+
+            catch (error) {
+
+                console.error(error);
+
+                loadingMessage.style.display = "none";
+
+                errorMessage.textContent =
+                    "Unable to connect to the backend. Make sure Spring Boot is running.";
+
+            }
+
+        }
+
+
+        // Update service status
+        async function updateStatus(serviceId, status) {
+
+            try {
+
+                const response = await fetch(
+                    `${API_URL}/${serviceId}/status?status=${encodeURIComponent(status)}`,
+                    {
+                        method: "PUT"
+                    }
+                );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Status update failed."
+                    );
+
+                }
+
+
+                alert(
+                    `Service ${serviceId} status updated to ${status}`
+                );
+
+            }
+
+
+            catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Unable to update status. Please check the backend."
+                );
+
+                // Reload the table
+                loadServices();
+
+            }
+
+        }
+
+
+        // Load services when page opens
+        window.onload = loadServices;
+
+    </script>
+
+</body>
+
+</html>

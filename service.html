@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Book a Service - FixZone</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            FIX<span>ZONE</span>
+        </div>
+
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="index.html#services">Services</a>
+            <a href="index.html#about">About</a>
+            <a href="index.html#contact">Contact</a>
+        </div>
+
+        <a href="service.html" class="nav-button">
+            Book a Service
+        </a>
+
+    </nav>
+
+
+    <!-- Service Registration Section -->
+
+    <section class="service-page">
+
+        <div class="service-heading">
+
+            <p class="small-title">FIXZONE SERVICE CENTER</p>
+
+            <h1>
+                Book Your <span>Service</span>
+            </h1>
+
+            <p>
+                Tell us about your mobile and the problem you're facing.
+                Our team will take care of the rest.
+            </p>
+
+        </div>
+
+
+        <!-- Service Form -->
+
+        <form class="service-form">
+
+            <h2>Service Request</h2>
+
+            <p class="form-description">
+                Enter your details below to register your mobile for service.
+            </p>
+
+
+            <!-- Customer Name -->
+
+            <div class="form-group">
+
+                <label for="name">
+                    Customer Name
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Enter your full name"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Phone Number -->
+
+            <div class="form-group">
+
+                <label for="phone">
+                    Phone Number
+                </label>
+
+                <input
+                    type="tel"
+                    id="phone"
+                    placeholder="Enter your phone number"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Mobile Brand -->
+
+            <div class="form-group">
+
+                <label for="brand">
+                    Mobile Brand
+                </label>
+
+                <select id="brand" required>
+
+                    <option value="">
+                        Select your mobile brand
+                    </option>
+
+                    <option>Samsung</option>
+                    <option>Apple</option>
+                    <option>OnePlus</option>
+                    <option>Vivo</option>
+                    <option>Oppo</option>
+                    <option>Realme</option>
+                    <option>Redmi</option>
+                    <option>Motorola</option>
+                    <option>Nothing</option>
+                    <option>Other</option>
+
+                </select>
+
+            </div>
+
+
+            <!-- Mobile Model -->
+
+            <div class="form-group">
+
+                <label for="model">
+                    Mobile Model
+                </label>
+
+                <input
+                    type="text"
+                    id="model"
+                    placeholder="Example: Galaxy A17"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Service Type -->
+
+            <div class="form-group">
+
+                <label for="service">
+                    Select Service
+                </label>
+
+                <select id="service" required>
+
+                    <option value="">
+                        Select a service
+                    </option>
+
+                    <option>Screen Repair</option>
+                    <option>Battery Replacement</option>
+                    <option>Software Service</option>
+                    <option>Charging Repair</option>
+                    <option>Camera Repair</option>
+                    <option>Speaker Repair</option>
+                    <option>Other</option>
+
+                </select>
+
+            </div>
+
+
+            <!-- Problem -->
+
+            <div class="form-group">
+
+                <label for="problem">
+                    Describe Your Problem
+                </label>
+
+                <textarea
+                    id="problem"
+                    rows="5"
+                    placeholder="Describe the problem with your mobile..."
+                    required
+                ></textarea>
+
+            </div>
+
+
+            <!-- Preferred Date -->
+
+            <div class="form-group">
+
+    <label for="date">
+        Preferred Service Date
+    </label>
+
+    <input
+        type="date"
+        id="date"
+        required
+    >
+
+    <small class="date-note">
+        Please select a future service date.
+    </small>
+
+</div>
+
+
+            <!-- Submit -->
+
+            <button
+                type="submit"
+                class="submit-button"
+            >
+                Submit Service Request
+            </button>
+
+
+            <!-- Back -->
+
+            <a
+                href="index.html"
+                class="back-home"
+            >
+                ← Back to Home
+            </a>
+
+        </form>
+
+    </section>
+
+
+    <!-- Footer -->
+
+        <footer>
+
+        <div class="logo">
+            FIX<span>ZONE</span>
+        </div>
+
+        <p>
+            © 2026 FixZone Mobile Service Center
+        </p>
+
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+# Spring Boot build files
+backend/target/
+
+# Maven
+backend/.mvn/
+
+# Java compiled files
+*.class
+
+# IDE files
+.vscode/
+.idea/
+
+# Environment files
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Database configuration
+backend/src/main/resources/application.properties
